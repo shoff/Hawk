@@ -71,7 +71,11 @@ namespace Hawk.Core.Utils.MVVM
 
         void ICommand.Execute(object parameter)
         {
-            Execute?.Invoke(parameter);
+            if (Execute != null && parameter!=null)
+            {
+                Execute(parameter);
+            }
+            //Execute?.Invoke(parameter);
         }
 
         bool ICommand.CanExecute(object parameter)

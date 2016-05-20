@@ -273,10 +273,10 @@ namespace Hawk.ETL.Process
         }
 
         [Browsable(false)]
-        public object UserControl => null;
+        public object UserControl {get{return null; }}
 
         [Browsable(false)]
-        public FrmState FrmState => FrmState.Large;
+        public FrmState FrmState {get{return FrmState.Large; }}
 
         private async void GetXPathAsync()
         {
@@ -487,7 +487,7 @@ namespace Hawk.ETL.Process
                 var p = doc2 as IDictionary<string, object>;
             }
             var doc = dicts as FreeDocument;
-            if (doc?.Children != null)
+            if (doc.Children != null)
             {
                 foreach (var child in doc.Children)
                 {
@@ -520,7 +520,7 @@ namespace Hawk.ETL.Process
                 SelectName = "属性" + CrawlItems.Count;
                 if (isAlert)
                 {
-                    MessageBox.Show($"已存在名称为{SelectName}的属性，不能重复添加");
+                    MessageBox.Show(string.Format("已存在名称为{0}的属性，不能重复添加", selectName));
                     return;
                 }
             }

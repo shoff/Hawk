@@ -13,18 +13,14 @@ using Microsoft.Scripting;
 
 namespace Hawk.ETL.Managements
 {
+    using System.Data;
+
     public class ProcessTask : TaskBase, IDictionarySerializable
     {
-        #region Constructors and Destructors
-
         public ProcessTask()
         {
             ProcessToDo = new FreeDocument();
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         ///     要实现的算法和对应的配置
@@ -32,8 +28,6 @@ namespace Hawk.ETL.Managements
         [XmlIgnore]
         [Browsable(false)]
         public FreeDocument ProcessToDo { get; set; }
-
-        #endregion
 
         public virtual FreeDocument DictSerialize(Scenario scenario = Scenario.Database)
         {
@@ -54,11 +48,6 @@ namespace Hawk.ETL.Managements
             ScriptPath = docu.Set("ScriptPath", ScriptPath);
         }
 
-        #region Constants and Fields
-
-        #endregion
-
-        #region Public Methods
         [Browsable(false)]
         public Project Project { get; set; }
 
@@ -70,7 +59,7 @@ namespace Hawk.ETL.Managements
            
             var path = Project.SavePath;
             XLogSys.Print.DebugFormat("加载工程文件，位置为{0}",Project.SavePath);
-            var folder = new DirectoryInfo(path).Parent?.FullName;
+            var folder = new DirectoryInfo(path).Parent.FullName;
             if (folder != null)
                 script = folder +"\\"+ script;
 
@@ -101,7 +90,7 @@ namespace Hawk.ETL.Managements
                 var syntax = ex as SyntaxErrorException;
                 if (syntax != null)
                 {
-                    XLogSys.Print.ErrorFormat("编译错误：{0}，位置在{1}行,从{2}到{3}",ex.Message,syntax.Line, syntax.RawSpan.Start,syntax.RawSpan.End);
+                   // XLogSys.Print.ErrorFormat("编译错误：{0}，位置在{1}行,从{2}到{3}",ex.Message,syntax.Line, syntax.RawSpan.Start,syntax.RawSpan.End);
                     return;
                 }
                 XLogSys.Print.Error(ex);
@@ -124,13 +113,11 @@ namespace Hawk.ETL.Managements
                 ProcessToDo.DictCopyTo(process as IDictionarySerializable);
                 process.Init();
                 EvalScript();
-            }, LogType.Important, $"加载{Name}任务", true);
+            }, LogType.Important, string.Format("加载{0}任务", Name), true);
         }
 
         [DisplayName("脚本路径")]
         [PropertyOrder(6)]
         public string ScriptPath { get; set; }
-
-        #endregion
     }
 }

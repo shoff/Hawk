@@ -232,7 +232,7 @@ namespace Hawk.Core.Utils.Plugins
                 }
             }
             var fre = dicts as FreeDocument;
-            if (fre?.Children != null)
+            if (fre.Children != null)
             {
                 Children = fre.Children;
             }

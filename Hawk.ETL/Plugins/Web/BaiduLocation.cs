@@ -52,7 +52,7 @@ namespace Hawk.ETL.Plugins.Web
 
                     var r = datas.Query(Region);
                     var apiUrl =
-                        $"http://api.map.baidu.com/place/v2/search?q={item}&region={r}&output={format}&ak={apikey}";
+                        string.Format("http://api.map.baidu.com/place/v2/search?q={0}&region={1}&output={2}&ak={3}", item, r, format, apikey);
 
 
                     //初始化方案信息实体类。

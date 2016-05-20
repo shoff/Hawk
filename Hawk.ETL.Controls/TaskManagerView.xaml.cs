@@ -3,6 +3,8 @@ using Hawk.Core.Utils.Plugins;
 
 namespace Hawk.ETL.Controls
 {
+    using System.ComponentModel;
+
     /// <summary>
     /// TaskManagerView.xaml 的交互逻辑
     /// </summary>
@@ -12,8 +14,14 @@ namespace Hawk.ETL.Controls
         public TaskManagerView()
         {
             InitializeComponent();
+
+            if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
+            {
+                this.FrmState = FrmState.Buttom;
+            }
+
         }
 
-        public FrmState FrmState => FrmState.Buttom;
+        public FrmState FrmState { get; set; }
     }
 }

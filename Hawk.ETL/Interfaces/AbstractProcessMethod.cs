@@ -8,34 +8,17 @@ using Hawk.Core.Utils.Plugins;
 
 namespace Hawk.ETL.Interfaces
 {
-   [XFrmWorkIgnore]
+    [XFrmWorkIgnore]
     public class AbstractProcessMethod : PropertyChangeNotifier, IDataProcess, IDictionarySerializable
     {
-        #region Constants and Fields
-
         protected string _name;
-
-
-
-        #endregion
-
-        #region Constructors and Destructors
 
         public AbstractProcessMethod()
         {
             Name = TypeName;
         }
 
-        #endregion
 
-
-        #region Events
-
-        #endregion
-
-        #region Properties
-
-   
         [Browsable(false)]
         public IMainFrm MainFrm { get; set; }
 
@@ -48,10 +31,10 @@ namespace Hawk.ETL.Interfaces
             get
             {
                 var property = new PropertyGrid();
-                property.SelectedObject=this;
+                property.SelectedObject = this;
                 return property;
             }
-        } 
+        }
 
 
         /// <summary>
@@ -80,25 +63,24 @@ namespace Hawk.ETL.Interfaces
 
         [Browsable(false)]
         public IProcessManager SysProcessManager { get; set; }
-      
+
 
 
         [Browsable(false)]
-        public string TypeName => AttributeHelper.GetCustomAttribute(GetType()).Name;
+        public string TypeName
+        {
+            get
+            {
+                return
 
-        #endregion
+                    AttributeHelper.GetCustomAttribute(GetType()).Name;
 
-        #region Implemented Interfaces
-
-        #region IBackgroundMethod
+            }
+        }
 
         public virtual void ReportFinalResult()
         {
         }
-
-        #endregion
-
-        #region IDictionarySerializable
 
         public virtual void DictDeserialize(IDictionary<string, object> dicts, Scenario scenario = Scenario.Database)
         {
@@ -120,10 +102,6 @@ namespace Hawk.ETL.Interfaces
             return dict;
         }
 
-        #endregion
-
-        #region IProcess
-
         public virtual bool Close()
         {
             return true;
@@ -139,16 +117,5 @@ namespace Hawk.ETL.Interfaces
         {
             return true;
         }
-
-        #endregion
-
-        #endregion
-
-        #region Methods
-
-
-
-
-        #endregion
     }
 }

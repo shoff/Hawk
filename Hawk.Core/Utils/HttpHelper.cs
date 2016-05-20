@@ -97,7 +97,7 @@ namespace Hawk.Core.Utils
             var dict2 = CookieToDict(c2);
             dict1.DictCopyTo(dict2);
 
-            var v2 = string.Join(";", dict2.Select(d => $"{d.Key}={d.Value}"));
+            var v2 = string.Join(";", dict2.Select(d => string.Format("{0}={1}",d.Key, d.Value)));
             return v2;
         }
         /// <summary>
@@ -321,7 +321,7 @@ namespace Hawk.Core.Utils
         {
             var property = typeof (WebHeaderCollection).GetProperty("InnerCollection",
                 BindingFlags.Instance | BindingFlags.NonPublic);
-            var collection = property?.GetValue(header, null) as NameValueCollection;
+            var collection = property.GetValue(header, null) as NameValueCollection;
             if (collection != null)
             {
                 collection[name] = value;

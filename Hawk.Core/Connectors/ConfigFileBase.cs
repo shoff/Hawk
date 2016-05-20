@@ -28,7 +28,7 @@ namespace Hawk.Core.Connectors
         private FreeDocument Configs { get; set; }
 
         [Browsable(false)]
-        public string Name => AttributeHelper.GetCustomAttribute(GetType()).Name;
+        public string Name {get{return AttributeHelper.GetCustomAttribute(GetType()).Name; }}
 
         [Browsable(false)]
         public virtual string SavePath { get; private set; }
@@ -39,7 +39,10 @@ namespace Hawk.Core.Connectors
 
         private static readonly Dictionary<string, IConfigFile> configFiles = new Dictionary<string, IConfigFile>();
 
-        public static IConfigFile Config => GetConfig();
+        public static IConfigFile Config
+        {
+            get { return GetConfig(); }
+        }
 
         public static IConfigFile GetConfig(string name = null)
         {

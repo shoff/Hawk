@@ -15,7 +15,7 @@ namespace Hawk.Core.Connectors
     {
         #region Properties
 
-        public override string ExtentFileName => ".json";
+        public override string ExtentFileName {get{return ".json"; }}
 
         #endregion
 

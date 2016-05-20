@@ -35,7 +35,7 @@ namespace Hawk.Core.Utils
             foreach (var d in docu)
             {
                 if(d.Key!="Headers")
-                    sb.Append($"{d.Key}:{d.Value}\n");
+                    sb.AppendFormat("{0}:{1}\n",d.Key, d.Value);
             }
             sb.Append(docu["Headers"]);
             return sb.ToString();

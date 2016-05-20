@@ -42,10 +42,14 @@ namespace Hawk.Core.Utils.Plugins
                 propertyGrid.SetObjectView(obj);
             }
             var dockableManager = this.MainFrmUI as IDockableManager;
-            dockableManager?.ActiveThisContent(this.control);
+
+            if (dockableManager != null)
+            {
+                dockableManager.ActiveThisContent(this.control);
+            }
         }
 
-        public object UserControl => control;
+        public object UserControl {get{return control; }}
 
 
         public bool ShowReadOnlyProperties
@@ -62,6 +66,6 @@ namespace Hawk.Core.Utils.Plugins
 
 
 
-        public FrmState FrmState => FrmState.Middle;
+        public FrmState FrmState {get{return FrmState.Middle; }}
     }
 }

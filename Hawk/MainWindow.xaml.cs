@@ -26,6 +26,8 @@ using Path = System.IO.Path;
 
 namespace Hawk
 {
+    using Core;
+
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
@@ -155,8 +157,8 @@ namespace Hawk
                     this,
                     new[]
                     {
-                        new Command("数据管理", obj => ActiveThisContent("数据管理")) ,
-                        new Command("算法面板", obj => ActiveThisContent("模块管理")) 
+                        new Command(Common.DataManagement, obj => ActiveThisContent(Common.DataManagement)) ,
+                        new Command(Common.AlgorithmPanel, obj => ActiveThisContent(Common.ModuleManagement)) 
                     });
             }
         }
@@ -165,9 +167,12 @@ namespace Hawk
         protected PluginManager PluginManager;
         private string pluginPosition;
 
-        public string MainStartUpLocation => Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+        public string MainStartUpLocation
+        {
+            get { return Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName); }
+        }
 
-        public  string MainPluginLocation => pluginPosition;
+        public  string MainPluginLocation {get{return pluginPosition; }}
 
         #endregion
         public List<ViewItem> ViewDictionary { get; private set; }
@@ -176,7 +181,7 @@ namespace Hawk
         {
             ViewItem view = ViewDictionary.FirstOrDefault(d => d.Name == name);
 
-            var item = view?.Container as LayoutAnchorable;
+            var item = view.Container as LayoutAnchorable;
             if (item == null)
                 return;
             item.Show();
@@ -189,7 +194,7 @@ namespace Hawk
         {
             ViewItem view = ViewDictionary.FirstOrDefault(d => d.View == rc);
 
-            var item = view?.Container as LayoutAnchorable;
+            var item = view.Container as LayoutAnchorable;
             if (item == null)
                 return;
             item.IsActive = true;
@@ -207,7 +212,7 @@ namespace Hawk
         {
             ViewItem view2 = ViewDictionary.FirstOrDefault(d => d.Model == model);
 
-            var item = view2?.Container as LayoutAnchorable;
+            var item = view2.Container as LayoutAnchorable;
             if (item == null)
                 return;
             item.Close();
@@ -228,7 +233,7 @@ namespace Hawk
         public void OnDockManagerUserChanged(DockChangedEventArgs e)
         {
             EventHandler<DockChangedEventArgs> handler = this.DockManagerUserChanged;
-            handler?.Invoke(this, e);
+            handler.Invoke(this, e);
         }
         public  void AddDockAbleContent(FrmState thisState, object thisControl, string name)
         {

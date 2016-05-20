@@ -22,6 +22,11 @@ namespace Hawk.ETL.Controls.DataViewers
     [XFrmWork("可编辑列表", "IDataViewer", "以可编辑列表模式查看数据")]
     public class DataGridViewer : PropertyChangeNotifier, IDataViewer
     {
+        public DataGridViewer()
+        {
+            IsEditable = true;
+        }
+
         public object SetCurrentView(IEnumerable<IFreeDocument> datas)
         {
             if (!datas.Any())
@@ -34,12 +39,12 @@ namespace Hawk.ETL.Controls.DataViewers
 
             foreach (var data in datas.GetKeys())
             {
-                listview.DataGridControl.Columns.Add(new Column { Title = data, FieldName = $"[{data}]"});
+                listview.DataGridControl.Columns.Add(new Column { Title = data, FieldName = string.Format("[{0}]", data)});
             }
             listview.DataContext = datas;
             return listview;
         }
 
-        public bool IsEditable => true;
+        public bool IsEditable {get;set;}
     }
 }

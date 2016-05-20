@@ -74,38 +74,24 @@ namespace Hawk.ETL.Managements
 
         [PropertyOrder(3)]
         [DisplayName("执行")]
-        public ReadOnlyCollection<ICommand> Commands => new ReadOnlyCollection<ICommand>(commands);
+        public ReadOnlyCollection<ICommand> Commands {get{return new ReadOnlyCollection<ICommand>(commands); }}
     }
 
     [XFrmWork("数据管理",  "查看和分析数据", "")]
     public class DataManager : AbstractPlugIn, IDataManager, IView
     {
-        #region Constants and Fields
-
-
-
         private IDockableManager dockableManager;
 
 
         private XFrmWorkPropertyGrid propertyGridWindow;
 
-
-
-        #endregion
-
-        #region Events
-
-        public ICollection<IDataBaseConnector> CurrentConnectors => _dbConnections;
+        public ICollection<IDataBaseConnector> CurrentConnectors {get{return _dbConnections; }}
 
         public event EventHandler DataSourceChanged;
 
-        #endregion
-
-        #region Properties
-
         private List<ICommand> commands;
 
-        public ReadOnlyCollection<ICommand> Commands => new ReadOnlyCollection<ICommand>(commands);
+        public ReadOnlyCollection<ICommand> Commands {get{return new ReadOnlyCollection<ICommand>(commands); }}
 
         public WPFPropertyGrid ConfigUI { get; set; }
 
@@ -124,7 +110,7 @@ namespace Hawk.ETL.Managements
         {
             get
             {
-                return DataCollections?.Select(i => i.Name);
+                return DataCollections.Select(i => i.Name);
             }
         }
 
@@ -138,10 +124,6 @@ namespace Hawk.ETL.Managements
         {
             get { return null; }
         }
-
-        #endregion
-
-        #region Public Methods
 
         private IProcessManager processManager;
         public DataCollection SelectedDataCollection { get; set; }
@@ -579,7 +561,7 @@ namespace Hawk.ETL.Managements
 
 
             dockableManager = MainFrmUI as IDockableManager;
-            if (processManager?.CurrentProject != null)
+            if (processManager.CurrentProject != null)
 
             {
                 LoadDataConnections();
@@ -604,7 +586,7 @@ namespace Hawk.ETL.Managements
 
         private void LoadDataConnections()
         {
-            _dbConnections = processManager?.CurrentProject?.DBConnections;
+            _dbConnections = processManager.CurrentProject.DBConnections;
             InformPropertyChanged("CurrentConnectors");
             foreach (var  dataBaseConnector in processManager.CurrentProject.DBConnections.Where(d=>d.AutoConnect==true
 ))
@@ -622,12 +604,6 @@ namespace Hawk.ETL.Managements
                 }
             }
         }
-
-        #endregion
-
-        #region Implemented Interfaces
-
-        #region IDataManager
 
         public DataCollection AddDataCollection(
             IEnumerable<IFreeDocument> source, string collectionName = null, bool isCover = false)
@@ -677,7 +653,7 @@ namespace Hawk.ETL.Managements
                 return DataCollections.First().ComputeData.ToList();
             }
             DataCollection p = DataCollections.FirstOrDefault(rc => rc.Name == name);
-            return p?.ComputeData;
+            return p.ComputeData;
         }
 
         public DataCollection GetCollection(string name)
@@ -737,12 +713,6 @@ namespace Hawk.ETL.Managements
             }, data.Count,notifyInterval:1000));
         }
 
-        #endregion
-
-        #endregion
-
-        #region Methods
-
         private void CleanData()
         {
             if (MessageBox.Show("确定删除内存数据么？", "警告信息", MessageBoxButton.OKCancel, MessageBoxImage.Question) ==
@@ -786,8 +756,6 @@ namespace Hawk.ETL.Managements
             }
             connector.RefreshTableNames();
         }
-
-        #endregion
 
         //AddFreeDocument
     }

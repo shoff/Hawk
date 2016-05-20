@@ -243,8 +243,8 @@ namespace Hawk.ETL.Plugins.Generators
             var result = new FreeDocument();
             foreach (var data in datas)
             {
-                var key = data[Column]?.ToString();
-                var value = data[ValueColumn]?.ToString();
+                var key = data[Column].ToString();
+                var value = data[ValueColumn].ToString();
 
                 if (string.IsNullOrEmpty(key) && string.IsNullOrEmpty(value))
                 {
@@ -269,7 +269,7 @@ namespace Hawk.ETL.Plugins.Generators
         public string NewColumn { get; set; }
 
         [Browsable(false)]
-        public bool OneOutput => false;
+        public bool OneOutput {get{return false; }}
 
         public override bool Init(IEnumerable<IFreeDocument> datas)
         {

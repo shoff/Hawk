@@ -22,16 +22,22 @@ namespace Hawk.Core.Connectors.Vitural
             data.AlreadyGetSize += (s, e) => OnPropertyChanged("Count");
         }
 
-        public override string Source => VirtualData.ItemsProvider.Name;
+        public override string Source {get{return VirtualData.ItemsProvider.Name; }}
 
-        [DisplayName("虚拟化数据集")]
-        public override bool IsVirtual => true;
+        [DisplayName("Virtualized DataSet")]
+        public override bool IsVirtual
+        {
+            get{return true;}
+        }
 
 
-        public IItemsProvider<IFreeDocument> ItemsProvider => VirtualData.ItemsProvider;
+        public IItemsProvider<IFreeDocument> ItemsProvider {get{return VirtualData.ItemsProvider; }}
 
         [Browsable(false)]
-        public override IList<IFreeDocument> ComputeData => VirtualData;
+        public override IList<IFreeDocument> ComputeData
+        {
+            get { return VirtualData; }
+        }
     }
 
 

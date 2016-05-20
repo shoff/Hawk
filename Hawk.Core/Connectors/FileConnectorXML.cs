@@ -11,7 +11,7 @@ namespace Hawk.Core.Connectors
     [XFrmWork("XML导入导出器",  "输出和输入XML文件", "")]
     public class FileConnectorXML : FileConnector
     {
-        public override string ExtentFileName => ".xml";
+        public override string ExtentFileName {get{return ".xml"; }}
 
         /// <summary>
         ///     将XmlDocument转化为string
@@ -78,7 +78,7 @@ namespace Hawk.Core.Connectors
             if (xTable == null)
                 yield break;
 
-            alreadyGetSize?.Invoke(xTable.ChildNodes.Count);
+            alreadyGetSize.Invoke(xTable.ChildNodes.Count);
             foreach (XmlNode xnode in xTable)
             {
 
@@ -129,7 +129,7 @@ namespace Hawk.Core.Connectors
                     else
                     {
                         XmlAttribute attr = docu.CreateAttribute(item.Key);
-                        attr.InnerText = item.Value?.ToString() ?? "";
+                        attr.InnerText = item.Value.ToString() ?? "";
                         node.Attributes.Append(attr);
                     }
                 }
@@ -150,7 +150,7 @@ namespace Hawk.Core.Connectors
                     foreach (var o in data)
                     {
                         XmlAttribute attr = docu.CreateAttribute(o.Key);
-                        attr.InnerText = o.Value?.ToString() ?? "";
+                        attr.InnerText = o.Value.ToString() ?? "";
 
                         node.Attributes.Append(attr);
                     }

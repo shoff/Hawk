@@ -9,11 +9,11 @@ namespace Hawk.Core.Utils.Plugins
     {
         #region Properties
          
-        public IAction BindingCommands => null; 
+        public IAction BindingCommands {get{return null; }} 
 
-        public FrmState FrmState => FrmState.Buttom;
+        public FrmState FrmState {get{return FrmState.Buttom; }}
 
-        public object UserControl => null;
+        public object UserControl {get{return null; }}
 
         #endregion
     }

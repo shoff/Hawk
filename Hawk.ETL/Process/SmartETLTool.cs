@@ -27,8 +27,6 @@ namespace Hawk.ETL.Process
         , groupName: "数据采集和处理")]
     public class SmartETLTool : AbstractProcessMethod, IView
     {
-        #region Constructors and Destructors
-
         public SmartETLTool()
         {
             AllETLTools = new List<XFrmWorkAttribute>();
@@ -49,19 +47,11 @@ namespace Hawk.ETL.Process
             }
         }
 
-        #endregion
-
-        #region Constants and Fields
-
         private ListBox alltoolList;
 
         private ListView dataView;
 
         private string searchText;
-
-        #endregion
-
-        #region Properties
 
         [DisplayName("命令")]
         [PropertyOrder(3)]
@@ -187,7 +177,7 @@ namespace Hawk.ETL.Process
                             RefreshSamples();
                             if (CurrentTool != null)
                             {
-                                XLogSys.Print.Info("插入工作模块，名称:" + CurrentTool?.ToString());
+                                XLogSys.Print.Info("插入工作模块，名称:" + CurrentTool.ToString());
                             }
                         })
                     }
@@ -226,7 +216,7 @@ namespace Hawk.ETL.Process
         protected List<XFrmWorkAttribute> AllETLTools { get; set; }
 
         [Browsable(false)]
-        public dynamic etls => CurrentETLTools;
+        public dynamic etls {get{return CurrentETLTools; }}
 
         [Category("2.清洗流程")]
         [DisplayName("已加载")]
@@ -234,10 +224,10 @@ namespace Hawk.ETL.Process
         public ObservableCollection<IColumnProcess> CurrentETLTools { get; set; }
 
         [Browsable(false)]
-        public FrmState FrmState => FrmState.Large;
+        public FrmState FrmState {get{return FrmState.Large; }}
 
         [Browsable(false)]
-        public virtual object UserControl => null;
+        public virtual object UserControl {get{return null; }}
 
         private void ExecuteAllExecutors()
         {
@@ -248,10 +238,6 @@ namespace Hawk.ETL.Process
                 ExecuteDatas();
             }
         }
-
-        #endregion
-
-        #region Public Methods
 
         public override void DictDeserialize(IDictionary<string, object> dicts, Scenario scenario = Scenario.Database)
         {
@@ -311,10 +297,6 @@ namespace Hawk.ETL.Process
             return true;
         }
 
-        #endregion
-
-        #region Methods
-
         private int _SampleMount;
         private readonly bool shouldUpdate = true;
 
@@ -344,7 +326,7 @@ namespace Hawk.ETL.Process
             }
             catch (Exception ex)
             {
-                XLogSys.Print.Error($"位于{tool.Column}列的{tool.TypeName}模块在初始化时出现异常：{ex},请检查任务参数");
+                //XLogSys.Print.Error($"位于{tool.Column}列的{tool.TypeName}模块在初始化时出现异常：{ex},请检查任务参数");
                 return func;
             }
             if (!tool.Enabled)
@@ -664,7 +646,7 @@ namespace Hawk.ETL.Process
             if (dataView == null && MainDescription.IsUIForm && IsUISupport)
             {
                 var dock = MainFrm as IDockableManager ?? ControlExtended.DockableManager;
-                var control = dock?.ViewDictionary.FirstOrDefault(d => d.Model == this);
+                var control = dock.ViewDictionary.FirstOrDefault(d => d.Model == this);
                 if (control != null)
                 {
                     if (control.View is IRemoteInvoke)
@@ -768,7 +750,7 @@ namespace Hawk.ETL.Process
                     var col = new GridViewColumn
                     {
                         Header = key,
-                        DisplayMemberBinding = new Binding($"[{key}]"),
+                        DisplayMemberBinding = new Binding(string.Format("[{0}]", key)),
                         Width = 155
                     };
                     view.Columns.Add(col);
@@ -822,7 +804,7 @@ namespace Hawk.ETL.Process
                     }
                 }
                 var nullgroup = Dict.FirstOrDefault(d => string.IsNullOrEmpty(d.Name));
-                nullgroup?.Value.AddRange(
+                nullgroup.Value.AddRange(
                     alltools.Where(
                         d =>
                             Documents.GetKeys().Contains(d.Column) == false &&
@@ -834,8 +816,6 @@ namespace Hawk.ETL.Process
                 }
             }
         }
-
-        #endregion
     }
 
     public enum GroupType
@@ -849,8 +829,6 @@ namespace Hawk.ETL.Process
     public class SmartGroup : PropertyChangeNotifier
     {
         private string _name;
-
-        #region Properties
 
         public ColumnInfo ColumnInfo { get; set; }
         public int Index { get; set; }
@@ -874,8 +852,6 @@ namespace Hawk.ETL.Process
         }
 
         public List<IColumnProcess> Value { get; set; }
-
-        #endregion
     }
 
     public class GroupConverter : IValueConverter

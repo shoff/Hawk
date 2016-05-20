@@ -12,21 +12,15 @@ namespace Hawk.ETL.Managements
     [XFrmWork("数据挖掘配置" )]
     public class DataMiningConfig : ConfigFile
     {
-        #region Constants and Fields
-
         public DataMiningConfig()
         {
             Projects = new List<ProjectItem>();
         }
 
-        #endregion
-
-        public override string SavePath => GetXMLFileLocation("MainConfig");
+        public override string SavePath {get{return GetXMLFileLocation("MainConfig"); }}
 
 
         public List<ProjectItem> Projects { get; set; }
-
-        #region Constructors and Destructors
 
         public override void RebuildConfig()
         {
@@ -54,10 +48,6 @@ namespace Hawk.ETL.Managements
             }
         }
 
-        #endregion
-
-        #region Public Methods
-
         public static string GetXMLFileLocation(string fileName)
         {
             //  if (MainDescription.IsUIForm)
@@ -80,8 +70,6 @@ namespace Hawk.ETL.Managements
                 return MainDescription.MainFrm.MainPluginLocation + "\\" + folderName + "\\";
             }
         }
-
-        #endregion
 
         // Public Methods (3) 
     }

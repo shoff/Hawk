@@ -31,7 +31,7 @@ namespace Hawk.Core.Utils.Plugins
 
         public string Name { get; set; }
 
-        public string TypeName => AttributeHelper.GetCustomAttribute(this.GetType()).Name;
+        public string TypeName {get{return AttributeHelper.GetCustomAttribute(this.GetType()).Name; }}
 
         #endregion
 

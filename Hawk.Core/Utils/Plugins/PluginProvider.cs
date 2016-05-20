@@ -66,7 +66,7 @@ namespace Hawk.Core.Utils.Plugins
             {
                 return GetPluginCollection(interfaceName).IndexOf(rc);
             }
-            throw new Exception($"当前类型{className}在接口{interfaceName}插件集合中没有发现");
+            throw new Exception(string.Format("当前类型{0}在接口{1}插件集合中没有发现", className, interfaceName));
         }
 
         public static object GetObjectInstance(Type pluginType)

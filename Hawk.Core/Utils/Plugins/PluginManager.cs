@@ -15,19 +15,6 @@ namespace Hawk.Core.Utils.Plugins
     /// </summary>
     public class PluginManager
     {
-        #region Constants and Fields
-
-
-
-
-
-        #endregion
-
-
-
-
-        #region Constructors and Destructors
-
         public PluginManager()
         {
             this.PluginFolders = new List<string>();
@@ -35,37 +22,27 @@ namespace Hawk.Core.Utils.Plugins
 
         }
 
-        #endregion
-
-        #region Properties
-
-     
-
         /// <summary>
         /// 文件命令菜单
         /// </summary>
-        public BindingAction FileCommands => new BindingAction("文件")
+        public BindingAction FileCommands = new BindingAction("文件")
         {
             ChildActions =
                 new ObservableCollection<ICommand> (),
         };
 
-        public FrmState FrmState => FrmState.Mini;
+        public FrmState FrmState {get{return FrmState.Mini; }}
 
         public IMainFrm MainFrmUI { get; set; }
 
         /// <summary>
         /// 系统插件字典
         /// </summary>
-        public Dictionary<Type, List<XFrmWorkAttribute>> SystemPluginDictionary => PluginProvider.PluginDictionary;
+        public Dictionary<Type, List<XFrmWorkAttribute>> SystemPluginDictionary {get{return PluginProvider.PluginDictionary; }}
 
 
-        public object PluginNames => PluginLoadControllor.Instance.PluginNames;
+        public object PluginNames {get{return PluginLoadControllor.Instance.PluginNames; }}
         private List<string> PluginFolders { get; set; }
-
-        #endregion
-
-        #region Public Methods
 
         public bool Close()
         {
@@ -138,7 +115,7 @@ namespace Hawk.Core.Utils.Plugins
                 d => plugins.Add(this.AddNewPlugin(d)), minPriority, maxPriority);
             foreach (IXPlugin xPlugin in plugins)
             {
-                xPlugin?.Init();
+                xPlugin.Init();
             }
             return true;
         }
@@ -232,16 +209,12 @@ namespace Hawk.Core.Utils.Plugins
             PluginProvider.SaveConfigFile();
         }
 
-        #endregion
-
-        #region Methods
-
         private IXPlugin AddNewPlugin(XFrmWorkAttribute describe)
         {
             if (this.MainFrmUI.PluginDictionary.ContainsKey(describe.Name))
             {
 
-              XLogSys.Print.Error($"插件类型{describe.Name}发现重复，请检查配置文件");
+              //XLogSys.Print.Error($"插件类型{describe.Name}发现重复，请检查配置文件");
                 return null;
             }
             var plugin = PluginProvider.GetObjectInstance(describe.MyType) as IXPlugin;
@@ -285,7 +258,5 @@ namespace Hawk.Core.Utils.Plugins
 
             MainFrmUI.PluginDictionary.Remove(name);
         }
-
-        #endregion
     }
 }

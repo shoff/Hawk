@@ -38,8 +38,8 @@ namespace Hawk.ETL.Crawlers
         {
             if (a1 == a2)
                 return false;
-            a1 = a1?.Trim();
-            a2 = a2?.Trim();
+            a1 = a1.Trim();
+            a2 = a2.Trim();
             return (string.IsNullOrEmpty(a1) || string.IsNullOrEmpty(a2)) == false;
         }
 
@@ -204,7 +204,7 @@ namespace Hawk.ETL.Crawlers
                     if (p2.HasAttributes)
                     {
                         var a = p2.Attributes.FirstOrDefault(d => d.Name == name);
-                        return a?.Value.Trim();
+                        return a.Value.Trim();
                     }
                 }
                 else if (ishtml)
@@ -410,7 +410,7 @@ namespace Hawk.ETL.Crawlers
                 var doc = item as IDictionary<string, object>;
                 foreach (var r in doc)
                 {
-                    var path = r.Value?.SearchXPathInner(value);
+                    var path = r.Value.SearchXPathInner(value);
                     if (path != null)
                     {
                         xpath += '/' + r.Key + path;
@@ -429,10 +429,10 @@ namespace Hawk.ETL.Crawlers
                     {
                         if (path != "")
 
-                            xpath += $"[{i}]/" + path;
+                            xpath += "["+path+"]/";
                         else
                         {
-                            xpath += $"[{i}]";
+                            xpath += "["+i+"]";
                         }
                         return xpath;
                     }

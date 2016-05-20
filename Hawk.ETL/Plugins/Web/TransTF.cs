@@ -71,7 +71,8 @@ namespace Hawk.ETL.Plugins.Web
             var httpitem = new HttpItem();
 
             string url =
-                $"http://openapi.baidu.com/public/2.0/bmt/translate?client_id={ClientID}&q={item}&from={language[Source.SelectItem]}&to={language[Target.SelectItem]}";
+                string.Format("http://openapi.baidu.com/public/2.0/bmt/translate?client_id={0}&q={1}&from={2}&to={3}", 
+                ClientID, item, language[Source.SelectItem], language[Target.SelectItem]);
             httpitem.URL = url;
             HttpStatusCode code;
 

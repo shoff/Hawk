@@ -52,9 +52,9 @@ namespace Hawk.Core.Connectors
         [DisplayName("包含头信息")]
         public bool ContainHeader { get; set; }
 
-        protected virtual string SplitChar => SplitString;
+        protected virtual string SplitChar {get{return SplitString; }}
 
-        public override string ExtentFileName => ".txt";
+        public override string ExtentFileName {get{return ".txt"; }}
 
 
         public void Save()
@@ -211,7 +211,7 @@ namespace Hawk.Core.Connectors
             }
         }
 
-        public override bool ShouldConfig => true;
+        public override bool ShouldConfig {get{return true; }}
 
         public override IEnumerable<IFreeDocument> WriteData(IEnumerable<IFreeDocument> datas)
         {

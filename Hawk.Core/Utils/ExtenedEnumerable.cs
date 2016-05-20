@@ -78,7 +78,10 @@ namespace Hawk.Core.Utils
                 var len = query.Length;
                 query = query.Substring(1, len - 2);
                 var result = document[query];
-                return result?.ToString();
+                if (result != null)
+                {
+                    return result.ToString();
+                }
             }
             return query;
         }
@@ -466,7 +469,13 @@ namespace Hawk.Core.Utils
         public static void ExecuteCommand(this ICollection<ICommand> commands, string name, params object[] paras)
         {
             Command first = commands.OfType<Command>().FirstOrDefault(d => d.Text == name);
-            first?.Execute(paras);
+
+            if (first != null)
+            {
+                first.Execute(paras);
+            }
+
+            //first?.Execute(paras);
         }
 
         /// <summary>
@@ -789,7 +798,10 @@ namespace Hawk.Core.Utils
             indexs.Sort();
             for (int i = indexs.Count - 1; i >= 0; i--)
             {
-                method?.Invoke(source[indexs[i]]);
+                if (method != null)
+                {
+                    method.Invoke(source[indexs[i]]);
+                }
 
                 source.RemoveAt(indexs[i]);
             }

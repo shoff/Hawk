@@ -39,12 +39,12 @@ namespace Hawk.Core.Connectors
 
         #region Properties
 
-        public virtual bool ShouldConfig => false;
+        public virtual bool ShouldConfig {get{return false; }}
 
         public Type DataType { get; set; }
 
 
-        public virtual string ExtentFileName => ".txt";
+        public virtual string ExtentFileName {get{return ".txt"; }}
 
         public string FileName { get; set; }
         public EncodingType EncodingType { get; set; }
@@ -85,7 +85,7 @@ namespace Hawk.Core.Connectors
             {
                 sb.Append(v.Key.Name);
 
-                sb.Append($"|*{v.Value}|");
+                sb.AppendFormat("|*{0}|", v.Value);
             }
             sb.Remove(sb.Length - 1, 1);
             return sb.ToString();

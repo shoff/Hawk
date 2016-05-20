@@ -20,8 +20,6 @@ namespace Hawk.ETL.Managements
     {
         private FreeDocument configDocument;
 
-        #region Constants and Fields
-
         private IDataManager dataManager;
 
 
@@ -31,14 +29,6 @@ namespace Hawk.ETL.Managements
         private string searchText;
 
         private IDataProcess selectedProcess;
-
-        #endregion
-
-        #region Events
-
-        #endregion
-
-        #region Properties
 
         public IAction BindingCommands { get; private set; }
 
@@ -87,23 +77,19 @@ namespace Hawk.ETL.Managements
             }
         }
 
-        public ICollection<IDataProcess> CurrentProcessCollections => ProcessCollection;
+        public ICollection<IDataProcess> CurrentProcessCollections {get{return ProcessCollection; }}
 
 
-        public FrmState FrmState => FrmState.Large;
+        public FrmState FrmState {get{return FrmState.Large; }}
 
 
-        public object UserControl => null;
+        public object UserControl {get{return null; }}
 
         private IDataProcess GetProcess(object data)
         {
             if (data != null) return data as IDataProcess;
             return SelectedProcess ?? null;
         }
-
-        #endregion
-
-        #region Public Methods
 
         private IDockableManager dockableManager;
 
@@ -433,16 +419,10 @@ namespace Hawk.ETL.Managements
 
         public override void SaveConfigFile()
         {
-            CurrentProject?.Save();
+            CurrentProject.Save();
 
             ConfigFile.GetConfig().SaveConfig();
         }
-
-        #endregion
-
-        #region Implemented Interfaces
-
-        #region IProcessManager
 
         private Project currentProject;
         private TaskBase _selectedTask;
@@ -519,16 +499,6 @@ namespace Hawk.ETL.Managements
 
         public event EventHandler OnCurrentProjectChanged;
 
-        #endregion
-
-        #region IViewManager
-
-        #endregion
-
-        #endregion
-
-        #region Methods
-
         private bool FilterMethod(object obj)
         {
             var process = obj as TaskBase;
@@ -567,9 +537,7 @@ namespace Hawk.ETL.Managements
 
         private void ShowConfigUI(object method)
         {
-            propertyGridWindow?.SetObjectView(method);
+            propertyGridWindow.SetObjectView(method);
         }
-
-        #endregion
     }
 }

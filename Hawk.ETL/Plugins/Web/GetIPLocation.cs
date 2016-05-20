@@ -25,7 +25,7 @@ namespace Hawk.ETL.Plugins.Web
 
 
                     var apiUrl =
-                        $"http://api.map.baidu.com/location/ip?ak={apikey}&ip={item}&coor=bd09ll";
+                        string.Format("http://api.map.baidu.com/location/ip?ak={0}&ip={1}&coor=bd09ll", apikey, item);
 
                     //初始化方案信息实体类。
                     var result = HttpHelper.GetWebSourceHtml(apiUrl, "utf-8");

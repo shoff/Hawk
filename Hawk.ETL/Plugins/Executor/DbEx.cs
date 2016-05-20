@@ -91,10 +91,10 @@ namespace Hawk.ETL.Plugins.Executor
                 if (ConnectorSelector.SelectItem.RefreshTableNames().FirstOrDefault(d => d.Name == TableName) == null)
 
                 {
-                    var data = datas?.FirstOrDefault() ?? new FreeDocument();
+                    var data = datas.FirstOrDefault() ?? new FreeDocument();
                     if (!ConnectorSelector.SelectItem.CreateTable(data, TableName))
                     {
-                        throw new Exception($"创建名字为{TableName}的表失败");
+                        throw new Exception(string.Format("创建名字为{0}的表失败", TableName));
                     }
                 }
             }

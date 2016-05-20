@@ -9,24 +9,21 @@ namespace Hawk.Core.Connectors
 {
     public class DataCollection : PropertyChangeNotifier, IDictionarySerializable
     {
-        #region Constants and Fields
-
         protected List<IFreeDocument> RealData;
 
 
         private string name;
 
         [DisplayName("来源")]
-        public virtual string Source => "默认来源";
+        public virtual string Source
+        {
+            get { return "默认来源"; }
+        }
 
         public override string ToString()
         {
             return Name;
         }
-
-        #endregion
-
-        #region Constructors and Destructors
 
         public DataCollection(IEnumerable<IFreeDocument> data)
         {
@@ -34,10 +31,6 @@ namespace Hawk.Core.Connectors
             RealData = new List<IFreeDocument>(data)
                ;
         }
-
-        #endregion
-
-        #region Properties
 
         public DataCollection()
         {
@@ -85,12 +78,6 @@ namespace Hawk.Core.Connectors
                 }
             }
         }
-
-        #endregion
-
-        #region Public Methods
-
-        #endregion
 
         public FreeDocument DictSerialize(Scenario scenario = Scenario.Database)
         {

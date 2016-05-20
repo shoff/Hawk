@@ -53,7 +53,7 @@ namespace Hawk.ETL.Plugins.Web
                 var sourcecity = datas.Query( SourceCity);
                 var destcity = datas.Query(DestCity);
                 var mode = map[ModeSelector.SelectItem];
-                var key = $"{source},{dest},{sourcecity},{destcity},{mode}";
+                var key = source + "," + dest + "," + sourcecity + "," + destcity + "," + mode;
                 var newlocation = buffHelper.Get(key);
                 if (newlocation == null)
                 {
@@ -61,16 +61,17 @@ namespace Hawk.ETL.Plugins.Web
                     var region = "";
                     if (mode == "transit" || mode == "walking")
                     {
-                        region = $"region={sourcecity}";
+                        region = string.Format("region={0}",sourcecity);
                     }
                     else
                     {
-                        region = $"origin_region={sourcecity}&destination_region={destcity}";
+                        region = string.Format("origin_region={0}&destination_region={1}",sourcecity,destcity);
 
                     }
 
                     var apiUrl =
-                        $"http://api.map.baidu.com/direction/v1?mode={mode}&origin={source}&destination={dest}&{region}&output={format}&ak={apikey}";
+                        string.Format(
+                            "http://api.map.baidu.com/direction/v1?mode={0}&origin={1}&destination={2}&{3}&output={4}&ak={5}", mode,source,dest, region, format, apikey);
 
 
                     //初始化方案信息实体类。

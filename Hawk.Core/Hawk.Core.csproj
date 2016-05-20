@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Hawk.Core</RootNamespace>
     <AssemblyName>Hawk.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib">
@@ -94,6 +96,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Common.zh-cn.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Common.zh-cn.resx</DependentUpon>
+    </Compile>
     <Compile Include="Connectors\ConfigFileBase.cs" />
     <Compile Include="Connectors\DataCollection.cs" />
     <Compile Include="Connectors\DataTypeConverter.cs" />
@@ -185,6 +197,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Common.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common.zh-cn.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Common.zh-cn.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

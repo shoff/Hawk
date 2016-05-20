@@ -2,7 +2,8 @@
 using Hawk.Core.Utils.Plugins;
 namespace Hawk.ETL.Controls
 
-{ 
+{
+    using System.ComponentModel;
 
 
     /// <summary>
@@ -11,19 +12,17 @@ namespace Hawk.ETL.Controls
     [XFrmWork("调试信息窗口",  "输出调试信息", "")]
     public partial class DebugManagerUI : UserControl, ICustomView
     {
-        #region Constructors and Destructors
-
         public DebugManagerUI()
         {
             this.InitializeComponent();
+
+            if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
+            {
+                this.FrmState = FrmState.Large;
+            }
+
         }
 
-        #endregion
-
-        #region Properties
-
-        public FrmState FrmState => FrmState.Buttom;
-
-        #endregion
+        public FrmState FrmState { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace Hawk.Core.Utils.Plugins
         /// </summary>
         [NonSerialized] public Type MyType;
 
-        public XFrmWorkAttribute Self => this;
+        public XFrmWorkAttribute Self {get{return this; }}
 
         #endregion
 

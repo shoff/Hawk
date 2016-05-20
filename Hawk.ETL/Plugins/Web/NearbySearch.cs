@@ -48,12 +48,12 @@ namespace Hawk.ETL.Plugins.Web
             {
                 var lat = item.ToString();
                 var lng = datas[Lng].ToString();
-                var bufkey = $"{lat},{lng}";
+                var bufkey = lat + "," + lng;
                 var newlocation = buffHelper.Get(bufkey);
                 if (newlocation == null)
                 {
                     var apiUrl =
-                        $"http://api.map.baidu.com/place/v2/search?ak={apikey}&output={format}&query={Query}&page_size=10&page_num=0&scope=2&location={lat},{lng}&radius={Radius}";
+                        "http://api.map.baidu.com/place/v2/search?ak="+apikey+"&output="+format+"&query="+Query+"&page_size=10&page_num=0&scope=2&location="+lat+","+lng+"&radius="+Radius;
                    
                     var result = HttpHelper.GetWebSourceHtml(apiUrl, "utf-8");
                     if (AllResult)

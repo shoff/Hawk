@@ -15,7 +15,7 @@ namespace Hawk.Core.Connectors
     {
         #region Properties
 
-        public override string ExtentFileName => ".xlsx";
+        public override string ExtentFileName {get{return ".xlsx"; }}
 
         #endregion
 
@@ -67,7 +67,7 @@ namespace Hawk.Core.Connectors
                 data.DictDeserialize(dict);
                 yield return data;
                 if(i%1000==0)
-                    XLogSys.Print.Info($"已经导入数量{i}，总共{sheet.LastRowNum}");
+                    XLogSys.Print.Info(string.Format(Common.AlreadyImportedX, i, sheet.LastRowNum));
             }
         }
 

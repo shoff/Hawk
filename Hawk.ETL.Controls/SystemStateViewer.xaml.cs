@@ -5,26 +5,26 @@ using Hawk.Core.Utils.Plugins;
 
 namespace Hawk.ETL.Controls
 {
+    using System.ComponentModel;
+
     /// <summary>
     /// SystemStateViewer.xaml 的交互逻辑
     /// </summary>
     [XFrmWork("系统状态视图" )]
     public partial class SystemStateViewer : UserControl, ICustomView
     {
-        #region Constructors and Destructors
-
         public SystemStateViewer()
         {
             this.InitializeComponent();
+
+            if (LicenseManager.UsageMode != LicenseUsageMode.Designtime)
+            {
+                this.FrmState = FrmState.Middle;
+            }
+
         }
 
-        #endregion
-
-        #region Properties
-
-        public FrmState FrmState => FrmState.Middle;
-
-        #endregion
+        public FrmState FrmState { get; set; }
 
         private void ListBox_MouseMove_1(object sender, System.Windows.Input.MouseEventArgs e)
         {

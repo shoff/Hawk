@@ -230,7 +230,7 @@ namespace Hawk.Core.Connectors
                 {
                     value = o.Value.ToString();
                 }
-                sb.Append($"'{value}',");
+                sb.AppendFormat("'{0}',", value);
             }
             sb.Remove(sb.Length - 1, 1);
             string sql = string.Format("INSERT INTO {0} VALUES({1})", dbTableName, sb);
@@ -355,7 +355,7 @@ namespace Hawk.Core.Connectors
                 sb.AppendFormat(" {0},", DataTypeConverter.ToType(o.Value));
             }
             sb.Remove(sb.Length - 1, 1);
-            string sql = $"CREATE TABLE {GetTableName(name)} ({sb})";
+            string sql = string.Format("CREATE TABLE {0} {1}", GetTableName(name), sb);
             ExecuteNonQuery(sql);
             RefreshTableNames();
             return true;

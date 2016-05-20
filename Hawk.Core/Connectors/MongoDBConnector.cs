@@ -106,8 +106,8 @@ namespace Hawk.Core.Connectors
             //if (ConnectionString.Contains("mongodb"))
             //    return ConnectionString;
             if (string.IsNullOrEmpty(UserName))
-                return $"mongodb://{Server}";
-            return $"mongodb://{Server}:{UserName}@{Password}";
+                return string.Format("mongodb://{0}",Server);
+            return string.Format("mongodb://{0}:{1}@{2}", Server, UserName, Password);
         }
 
         protected override void ConnectStringToOtherInfos()
@@ -140,7 +140,8 @@ namespace Hawk.Core.Connectors
             Mongo = new Mongo(config.BuildConfiguration());
             IsUseable = Mongo.TryConnect();
             if (IsUseable != true) return IsUseable;
-            update = new Document {["$inc"] = new Document(AutoIndexName, 1)};
+            // todo
+            // update = new Document {["$inc"] = new Document(AutoIndexName, 1)};
             DB = Mongo.GetDatabase(DBName);
             return IsUseable;
            
