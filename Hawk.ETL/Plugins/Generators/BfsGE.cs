@@ -25,7 +25,7 @@ namespace Hawk.ETL.Plugins.Generators
             URLHash = new SortedSet<int>();
         }
 
-        private SortedSet<int> URLHash { get; }
+        private SortedSet<int> URLHash { get; set; }
 
         [DisplayName("BFS起始位置")]
         public string StartURL { get; set; }

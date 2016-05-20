@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Threading;
-using Hawk.Core.Connectors;
-using Hawk.Core.Utils;
-using Hawk.Core.Utils.Plugins;
-using Hawk.ETL.Crawlers;
-using Hawk.ETL.Interfaces;
-using Hawk.ETL.Plugins.Generators;
-using Hawk.ETL.Process;
-using HtmlAgilityPack;
-
-namespace Hawk.ETL.Plugins.Transformers
+﻿namespace Hawk.ETL.Plugins.Transformers
 {
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Net;
+    using System.Text.RegularExpressions;
+    using System.Threading;
+    using Core.Connectors;
+    using Core.Utils;
+    using Core.Utils.Plugins;
+    using Crawlers;
+    using Generators;
+    using HtmlAgilityPack;
+    using Interfaces;
+    using Process;
+
     [XFrmWork("从爬虫转换", "使用网页采集器获取网页数据，拖入的列需要为超链接")]
     public class CrawlerTF : TransformerBase
     {
@@ -24,13 +24,15 @@ namespace Hawk.ETL.Plugins.Transformers
         private BfsGE generator;
         private bool isfirst;
 
+        private Regex regex;
+
         public CrawlerTF()
         {
-            processManager = MainDescription.MainFrm.PluginDictionary["模块管理"] as IProcessManager;
-          //  var defaultcraw = processManager.CurrentProcessCollections.FirstOrDefault(d => d is SmartCrawler);
-            MaxTryCount = "1";
+            this.processManager = MainDescription.MainFrm.PluginDictionary["模块管理"] as IProcessManager;
+            //  var defaultcraw = processManager.CurrentProcessCollections.FirstOrDefault(d => d is SmartCrawler);
+            this.MaxTryCount = "1";
             //if (defaultcraw != null) CrawlerSelector = defaultcraw.Name;
-            PropertyChanged += (s, e) => { buffHelper.Clear(); };
+            this.PropertyChanged += (s, e) => { this.buffHelper.Clear(); };
         }
 
         [DisplayName("最大重复次数")]
@@ -46,17 +48,16 @@ namespace Hawk.ETL.Plugins.Transformers
         [Description("填写采集器或模块的名称")]
         public string CrawlerSelector
         {
-            get { return _crawlerSelector; }
+            get { return this._crawlerSelector; }
             set
             {
-                if (_crawlerSelector != value)
+                if (this._crawlerSelector != value)
                 {
-                    buffHelper?.Clear();
+                    this.buffHelper.Clear();
                 }
-                _crawlerSelector = value;
+                this._crawlerSelector = value;
             }
         }
-
 
 
         [Category("请求队列")]
@@ -72,116 +73,119 @@ namespace Hawk.ETL.Plugins.Transformers
         [DisplayName("启用正则")]
         public bool IsRegex { get; set; }
 
-        private Regex regex;
         private SmartCrawler crawler { get; set; }
 
         public override bool Init(IEnumerable<IFreeDocument> datas)
         {
-            if (generator == null)
+            if (this.generator == null)
             {
-                var mainstream =
-            processManager.CurrentProcessCollections.OfType<SmartETLTool>()
-                .FirstOrDefault(d => d.CurrentETLTools.Contains(this));
-                generator = mainstream.CurrentETLTools.FirstOrDefault(d => d.Name == GEName) as BfsGE;
+                var mainstream = this.processManager.CurrentProcessCollections.OfType<SmartETLTool>()
+                    .FirstOrDefault(d => d.CurrentETLTools.Contains(this));
+                this.generator = mainstream.CurrentETLTools.FirstOrDefault(d => d.Name == this.GEName) as BfsGE;
             }
 
-                   crawler =
-                processManager.CurrentProcessCollections.FirstOrDefault(d => d.Name == CrawlerSelector) as SmartCrawler;
-            if (crawler != null)
+            this.crawler =
+                this.processManager.CurrentProcessCollections.FirstOrDefault(d => d.Name == this.CrawlerSelector) as SmartCrawler;
+            if (this.crawler != null)
             {
-                IsMultiYield = crawler?.IsMultiData == ListType.List;
+                this.IsMultiYield = this.crawler.IsMultiData == ListType.List;
             }
             else
             {
-                var task = processManager.CurrentProject.Tasks.FirstOrDefault(d => d.Name == CrawlerSelector);
+                var task = this.processManager.CurrentProject.Tasks.FirstOrDefault(d => d.Name == this.CrawlerSelector);
                 if (task == null)
+                {
                     return false;
+                }
                 ControlExtended.UIInvoke(() => { task.Load(false); });
-                crawler =
-                    processManager.CurrentProcessCollections.FirstOrDefault(d => d.Name == CrawlerSelector) as
-                        SmartCrawler;
+                this.crawler = this.processManager.CurrentProcessCollections.FirstOrDefault(d => d.Name == this.CrawlerSelector) as
+                    SmartCrawler;
             }
 
-         
 
-
-            IsMultiYield = crawler?.IsMultiData == ListType.List;
-            isfirst = true;
-            OneOutput = false;
-            if(IsRegex)
-                regex=new Regex(Prefix);
-            return crawler != null && base.Init(datas);
+            this.IsMultiYield = this.crawler.IsMultiData == ListType.List;
+            this.isfirst = true;
+            this.OneOutput = false;
+            if (this.IsRegex)
+            {
+                this.regex = new Regex(this.Prefix);
+            }
+            return this.crawler != null && base.Init(datas);
         }
 
-        
+
         private List<FreeDocument> GetDatas(IFreeDocument data)
         {
-            var p = data[Column];
+            var p = data[this.Column];
             if (p == null)
+            {
                 return new List<FreeDocument>();
+            }
             var url = p.ToString();
             var bufkey = url;
-            var post = data.Query(PostData);
-            if (crawler.Http.Method == MethodType.POST)
+            var post = data.Query(this.PostData);
+            if (this.crawler.Http.Method == MethodType.POST)
             {
                 bufkey += post;
             }
-            var htmldoc = buffHelper.Get(bufkey);
+            var htmldoc = this.buffHelper.Get(bufkey);
             var docs = new List<FreeDocument>();
             if (htmldoc == null)
             {
-                var delay = data.Query(DelayTime);
+                var delay = data.Query(this.DelayTime);
                 var delaytime = 0;
                 if (delay != null && int.TryParse(delay, out delaytime))
                 {
                     if (delaytime != 0)
+                    {
                         Thread.Sleep(delaytime);
+                    }
                 }
 
                 HttpStatusCode code;
                 int maxcount = 1;
-                int.TryParse(data.Query(MaxTryCount),out maxcount);
-                  
+                int.TryParse(data.Query(this.MaxTryCount), out maxcount);
+
                 int count = 0;
-                while (count<maxcount)
+                while (count < maxcount)
                 {
-                    docs = crawler.CrawlData(url, out htmldoc, out code, post);
+                    docs = this.crawler.CrawlData(url, out htmldoc, out code, post);
                     if (HttpHelper.IsSuccess(code))
                     {
-                        buffHelper.Set(bufkey, htmldoc);
+                        this.buffHelper.Set(bufkey, htmldoc);
                         break;
                     }
                     count++;
-
                 }
-             
-            
             }
             else
             {
-                docs = crawler.CrawlData(htmldoc);
+                docs = this.crawler.CrawlData(htmldoc);
             }
 
-            if (generator != null)
+            if (this.generator != null)
             {
-
                 var others = htmldoc.DocumentNode.SelectNodes("//@href");
 
                 var r3 = others.Select(d => d.Attributes["href"].Value).ToList();
                 IEnumerable<string> r4;
 
-                if (string.IsNullOrEmpty(Prefix))
+                if (string.IsNullOrEmpty(this.Prefix))
+                {
                     r4 = r3;
-              else  if(IsRegex==false)
-                 r4 =
-                    r3.Where(d => d.StartsWith(Prefix)).Where(d => true);
-              else
-              {
-                  r4 = r3.Where(d => regex.IsMatch(d));
-              }
+                }
+                else if (this.IsRegex == false)
+                {
+                    r4 =
+                        r3.Where(d => d.StartsWith(this.Prefix)).Where(d => true);
+                }
+                else
+                {
+                    r4 = r3.Where(d => this.regex.IsMatch(d));
+                }
                 foreach (var href in r4)
                 {
-                    generator.InsertQueue(href);
+                    this.generator.InsertQueue(href);
                 }
             }
             return docs;
@@ -194,7 +198,7 @@ namespace Hawk.ETL.Plugins.Transformers
                 var docs = GetDatas(data);
                 foreach (var doc in docs)
                 {
-                    yield return doc.MergeQuery(data, NewColumn);
+                    yield return doc.MergeQuery(data, this.NewColumn);
                 }
             }
         }

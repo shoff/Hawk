@@ -27,7 +27,7 @@ namespace Hawk.ETL.Plugins.Transformers
  
         public override object TransformData(IFreeDocument datas)
         {
-            object item = datas[Column];
+            object item = datas[this.Column];
             if (item == null)
                 item = "";
             List<object> strs = new List<object>();

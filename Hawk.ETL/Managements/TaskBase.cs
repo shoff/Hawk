@@ -119,7 +119,7 @@ namespace Hawk.ETL.Managements
         public virtual void Remove()
         {
             ControlExtended.UIInvoke(() => ProcessManager.CurrentProcessTasks.Remove(this));
-            CancellationToken?.Cancel();
+            CancellationToken.Cancel();
             autoReset.Close();
             
         }

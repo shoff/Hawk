@@ -39,7 +39,7 @@ namespace Hawk.ETL.Managements
                 var finish = true;
                 foreach (var r in enumable)
                 {
-                    action?.Invoke(r);
+                    action.Invoke(r);
 
                     if (r is int)
                     {

@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using Hawk.Core.Connectors;
-using Hawk.Core.Utils;
-using Hawk.Core.Utils.MVVM;
-using Hawk.Core.Utils.Plugins;
-
-namespace Hawk.ETL.Managements
+﻿namespace Hawk.ETL.Managements
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.IO;
+    using System.Linq;
+    using Core.Connectors;
+    using Core.Utils;
+    using Core.Utils.MVVM;
+    using Core.Utils.Plugins;
+
     public class ProjectItem : PropertyChangeNotifier, IDictionarySerializable
     {
         [DisplayName("保存路径")]
@@ -29,25 +29,27 @@ namespace Hawk.ETL.Managements
         public virtual FreeDocument DictSerialize(Scenario scenario = Scenario.Database)
         {
             var dict = new FreeDocument();
-            dict.Add("Name", Name);
-            dict.Add("Description", Description);
-            dict.Add("Version", Version);
-            dict.Add("SavePath", SavePath);
+            dict.Add("Name", this.Name);
+            dict.Add("Description", this.Description);
+            dict.Add("Version", this.Version);
+            dict.Add("SavePath", this.SavePath);
             return dict;
         }
 
         public virtual void DictDeserialize(IDictionary<string, object> docu, Scenario scenario = Scenario.Database)
         {
-            Name = docu.Set("Name", Name);
-            Description = docu.Set("Description", Description);
-            Version = docu.Set("Version", Version);
-            SavePath = docu.Set("SavePath", SavePath);
+            this.Name = docu.Set("Name", this.Name);
+            this.Description = docu.Set("Description", this.Description);
+            this.Version = docu.Set("Version", this.Version);
+            this.SavePath = docu.Set("SavePath", this.SavePath);
         }
 
         public static Project LoadProject(string path)
         {
             if (File.Exists(path) == false)
+            {
                 throw new Exception("当前工程文件的路径不存在，生成新工程");
+            }
             var xml = new FileConnectorXML {FileName = path};
             var r = xml.ReadFile().FirstOrDefault();
             var project = new Project();
@@ -67,8 +69,8 @@ namespace Hawk.ETL.Managements
     {
         public Project()
         {
-            Tasks = new ObservableCollection<ProcessTask>();
-            DBConnections = new ObservableCollection<IDataBaseConnector>();
+            this.Tasks = new ObservableCollection<ProcessTask>();
+            this.DBConnections = new ObservableCollection<IDataBaseConnector>();
         }
 
 
@@ -90,15 +92,18 @@ namespace Hawk.ETL.Managements
             var connector = new FileConnectorXML();
 
 
-            if (SavePath != null && File.Exists(SavePath))
+            if (this.SavePath != null && File.Exists(this.SavePath))
             {
-                connector.FileName = SavePath;
+                connector.FileName = this.SavePath;
             }
             else
             {
                 var result = connector.CheckFilePath(FileOperate.Save);
-                if (result == false) return;
-                SavePath = connector.FileName;
+                if (result == false)
+                {
+                    return;
+                }
+                this.SavePath = connector.FileName;
             }
 
             connector.WriteAll(
@@ -114,12 +119,16 @@ namespace Hawk.ETL.Managements
             {
                 var result = connector.CheckFilePath(FileOperate.Read);
                 if (result == false)
+                {
                     return null;
+                }
             }
             var proj = connector.ReadFile().FirstOrDefault();
 
             if (proj == null)
+            {
                 return null;
+            }
             var proj2 = new Project();
             proj.DictCopyTo(proj2);
             proj2.SavePath = connector.FileName;
@@ -131,10 +140,10 @@ namespace Hawk.ETL.Managements
         {
             var dict = base.DictSerialize();
 
-            dict.Children = Tasks.Select(d => d.DictSerialize()).ToList();
+            dict.Children = this.Tasks.Select(d => d.DictSerialize()).ToList();
             var connecots = new FreeDocument
             {
-                Children = DBConnections.Select(d => (d as IDictionarySerializable).DictSerialize()).ToList()
+                Children = this.DBConnections.Select(d => (d as IDictionarySerializable).DictSerialize()).ToList()
             };
             ;
             dict.Add("DBConnections", connecots);
@@ -152,11 +161,11 @@ namespace Hawk.ETL.Managements
 
                 foreach (var item in items)
                 {
-                    var proces= new ProcessTask();
+                    var proces = new ProcessTask();
                     proces.Project = this;
                     proces.DictDeserialize(item);
-                   
-                    Tasks.Add(proces);
+
+                    this.Tasks.Add(proces);
                 }
             }
 
@@ -164,15 +173,21 @@ namespace Hawk.ETL.Managements
             {
                 var items = docu["DBConnections"] as FreeDocument;
 
-                if (items?.Children == null) return;
+                if (items.Children == null)
+                {
+                    return;
+                }
                 foreach (var item in items.Children)
                 {
                     var type = item["TypeName"].ToString();
                     var conn = PluginProvider.GetObjectByType<IDataBaseConnector>(type) as DBConnectorBase;
-                    if (conn == null) continue;
+                    if (conn == null)
+                    {
+                        continue;
+                    }
                     conn.DictDeserialize(item);
 
-                    DBConnections.Add(conn);
+                    this.DBConnections.Add(conn);
                 }
             }
         }
